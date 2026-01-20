@@ -63,11 +63,13 @@ export default function NotesClient({
     <>
       <div className={css.toolbar}>
         <SearchBox onChange={setSearch} />
-        <Pagination
-          pageCount={data.totalPages}
-          currentPage={page}
-          onPageChange={setPage}
-        />
+        {data.totalPages > 1 && (
+          <Pagination
+            pageCount={data.totalPages}
+            currentPage={page}
+            onPageChange={setPage}
+          />
+        )}
         <button
           className={css.button}
           type="button"
