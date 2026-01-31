@@ -1,25 +1,33 @@
 import Link from "next/link";
+import css from "./ProfileLayout.module.css";
 
 function ProfileLayout({ children }: { children: React.ReactNode }) {
   return (
-    <>
-      <div>
+    <div className={css.layout}>
+      <aside className={css.sidebar}>
         <nav>
-          <ul>
+          <ul className={css.menu}>
             <li>
-              <Link href="/profile">Profile</Link>
+              <Link className={css.link} href="/profile">
+                Profile
+              </Link>
             </li>
             <li>
-              <Link href="/profile/notifications">Notifications</Link>
+              <Link className={css.link} href="/profile/notifications">
+                Notifications
+              </Link>
             </li>
             <li>
-              <Link href="/profile/settings">Settings</Link>
+              <Link className={css.link} href="/profile/settings">
+                Settings
+              </Link>
             </li>
           </ul>
         </nav>
-      </div>
-      <div>{children}</div>
-    </>
+      </aside>
+
+      <main className={css.content}>{children}</main>
+    </div>
   );
 }
 
