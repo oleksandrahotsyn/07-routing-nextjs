@@ -20,6 +20,14 @@ api.interceptors.request.use((config) => {
 
 export type NotesResponse = {
   notes: Note[];
+  totalPages: number;
+};
+
+type FetchNotesParams = {
+  page: number;
+  perPage: number;
+  search?: string;
+  tag?: NoteTag;
 };
 
 export async function getNotes(): Promise<NotesResponse> {
@@ -33,5 +41,23 @@ export async function deleteNote(id: string): Promise<void> {
 
 export async function getNote(id:Note["id"]) {
   const { data } = await api.get<Note>(`/notes/${id}`);
+  return data;
+}
+
+export async function fetchNotes({
+  page,
+  perPage,
+  search,
+  tag,
+}: FetchNotesParams): Promise<NotesResponse> {
+  const { data } = await api.get<NotesResponse>("/notes", {
+    params: {
+      page,
+      perPage,
+      ...(search?.trim() ? { search: search.trim() } : {}),
+      ...(tag ? { tag } : {}),
+    },
+  });
+
   return data;
 }

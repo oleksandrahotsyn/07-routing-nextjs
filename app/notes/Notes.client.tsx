@@ -51,20 +51,15 @@ export default function NotesClient({
     placeholderData: keepPreviousData,
   });
 
-  if (isLoading) {
-    return <p>Loading, please wait...</p>;
-  }
-
-  if (error || !data) {
-    return <p>Something went wrong.</p>;
-  }
+  const notes = data?.notes ?? [];
+  const totalPages = data?.totalPages ?? 1;
 
   return (
     <>
       <div className={css.toolbar}>
         <SearchBox onChange={setSearch} />
         <Pagination
-          pageCount={data.totalPages}
+          pageCount={totalPages}
           currentPage={page}
           onPageChange={setPage}
         />
@@ -83,7 +78,7 @@ export default function NotesClient({
         )}
       </div>
 
-      <NoteList notes={data.notes} />
+      <NoteList notes={notes} />
     </>
   );
 }
