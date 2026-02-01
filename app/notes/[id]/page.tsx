@@ -1,4 +1,4 @@
-import { QueryClient } from "@tanstack/react-query";
+import { QueryClient, HydrationBoundary, dehydrate } from "@tanstack/react-query";
 import { getNote } from "@/lib/api";
 import NoteDetailsClient from "./NoteDetails.client";
 
@@ -17,9 +17,10 @@ async function Note({ params }: NoteProps) {
     })
 
     return (
-        <div>
+        <HydrationBoundary state={dehydrate(queryClient)}>
             <NoteDetailsClient />
-        </div>
+        </HydrationBoundary>
+        
     )
 }
 
