@@ -7,7 +7,8 @@ async function Notes() {
 
   return (
     <div>
-            <HydrationBoundary state={dehydrate(queryClient)}><NoteList notes={data.notes} /></HydrationBoundary>
+      <HydrationBoundary state={dehydrate(queryClient)}>
+        <NoteList notes={data.notes} /></HydrationBoundary>
       
     </div>
   );

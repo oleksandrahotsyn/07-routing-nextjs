@@ -23,10 +23,15 @@ export type NotesResponse = {
 };
 
 export async function getNotes(): Promise<NotesResponse> {
-  const { data } = await api.get<NotesResponse>("/notes");
+  const { data } = await api.get<NotesResponse>(`/notes`);
   return data;
 }
 
 export async function deleteNote(id: string): Promise<void> {
   await api.delete(`/notes/${id}`);
+}
+
+export async function getNote(id:Note["id"]) {
+  const { data } = await api.get<Note>(`/notes/${id}`);
+  return data;
 }
