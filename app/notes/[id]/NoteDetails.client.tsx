@@ -6,48 +6,38 @@ import { useQuery } from "@tanstack/react-query";
 import type { Note } from "@/types/note";
 import css from "./NoteDetails.module.css";
 
+import { getNote } from "@/lib/api";
+import { useState } from "react";
+
 function NoteDetailsClient() {
   const params = useParams<{ id: string }>();
   const id = params.id;
 
   const router = useRouter();
 
-  const {
-    data: note,
-    isLoading,
-    error,
-  } = useQuery<Note>({
+  const {data} = useQuery<Note>({
     queryKey: ["note", id],
-    queryFn: () => fetchNoteById(id),
+    queryFn: () => getNote(id),
     enabled: Boolean(id),
     refetchOnMount: false,
   });
 
-  if (isLoading) {
-    return <p>Loading, please wait...</p>;
-  }
+  const [isEdit, setIsEdit] = useState(false);
 
-  if (error || !note) {
-    return <p>Something went wrong.</p>;
-  }
-
-  const createdDate = new Date(note.createdAt).toLocaleString();
-  const handleGoBack = () => {
-    const isSure = confirm("Are you sure?");
-    if (isSure) {
-      router.back();
-    }
+   const handleEdit = () => {
+     setIsEdit(true);
   };
   return (
-    <div className={css.container}>
-      <div className={css.item}>
-        <div className={css.header}>
-          <h2>{note.title}</h2>
-        </div>
-        <p className={css.content}>{note.content}</p>
-        <p className={css.date}>{createdDate ? String(createdDate) : ""}</p>
-      </div>
-      <button onClick={handleGoBack}>Back</button>
+    <div>
+      <button onClick={handleEdit}>Edit</button>
+      {isEdit ? (<form>
+        <div> <input type="text" placeholder="Title"/> </div>
+        <div> <textarea name="" id="" placeholder="Content"></textarea> </div>
+        <button>Submit</button>
+      </form>) : ( <>
+          <h1> {data?.title} </h1>
+          <p> {data?.content} </p></>
+      )}
     </div>
   );
 }
