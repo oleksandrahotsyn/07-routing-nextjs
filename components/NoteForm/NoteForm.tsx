@@ -7,7 +7,7 @@ import * as Yup from "yup";
 import css from "./NoteForm.module.css";
 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createNote } from "../../lib/api";
+import { createNote, updateNote  } from "@/lib/api";
 import toast from "react-hot-toast";
 
 const tags = ["Todo", "Work", "Personal", "Meeting", "Shopping"] as const;
@@ -20,6 +20,9 @@ export interface NoteFormValues {
 
 interface NoteFormProps {
   onCancel: () => void;
+  mode?: "create" | "edit";
+  noteId?: string;
+  initialValues?: NoteFormValues;
 }
 
 const validationSchema = Yup.object({
@@ -33,40 +36,58 @@ const validationSchema = Yup.object({
     .required("Tag is required"),
 });
 
-export default function NoteForm({ onCancel }: NoteFormProps) {
+export default function NoteForm({   onCancel,
+  mode = "create",
+  noteId,
+  initialValues, }: NoteFormProps) {
   const queryClient = useQueryClient();
 
   const createMutation = useMutation({
-    mutationFn: (values: NoteFormValues) =>
-      createNote({
+    mutationFn: (values: NoteFormValues) =>{
+      const payload = {
         title: values.title.trim(),
         content: values.content.trim(),
         tag: values.tag,
-      }),
+      };
+
+      if (mode === "edit") {
+        if (!noteId) throw new Error("noteId is required for edit mode");
+        return updateNote(noteId, payload);
+      }
+
+      return createNote(payload);
+    },
     onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: ["notes"] });
-      toast.success("Note created");
+await queryClient.invalidateQueries({ queryKey: ["notes"] });
+
+      if (mode === "edit" && noteId) {
+        await queryClient.invalidateQueries({ queryKey: ["note", noteId] });
+      }
+
+      toast.success(mode === "edit" ? "Note updated" : "Note created");
       onCancel();
     },
     onError: () => {
-      toast.error("Failed to create note");
+      toast.error(mode === "edit" ? "Failed to update note" : "Failed to create note");
     },
   });
 
-  const formik = useFormik<NoteFormValues>({
-    initialValues: {
+const formik = useFormik<NoteFormValues>({
+  initialValues:
+    initialValues ?? {
       title: "",
       content: "",
       tag: "Todo",
     },
-    validationSchema,
-    onSubmit: async (values, helpers) => {
-      try {
-        await createMutation.mutateAsync(values);
-        helpers.resetForm();
-      } catch {}
-    },
-  });
+  enableReinitialize: true,
+  validationSchema,
+  onSubmit: async (values, helpers) => {
+    try {
+      await createMutation.mutateAsync(values);
+      helpers.resetForm();
+    } catch {}
+  },
+});
 
   return (
     <FormikProvider value={formik}>
@@ -151,7 +172,7 @@ export default function NoteForm({ onCancel }: NoteFormProps) {
             className={css.submitButton}
             disabled={createMutation.isPending || !formik.isValid}
           >
-            Create note
+            {mode === "edit" ? "Save changes" : "Create note"}
           </button>
         </div>
       </form>

@@ -61,3 +61,32 @@ export async function fetchNotes({
 
   return data;
 }
+
+type CreateNoteParams = {
+  title: string;
+  content?: string;
+  tag: NoteTag;
+};
+
+export async function createNote({
+  title,
+  content,
+  tag,
+}: CreateNoteParams): Promise<Note> {
+  const payload = {
+    title: title.trim(),
+    tag,
+    ...(content?.trim() ? { content: content.trim() } : {}),
+  };
+
+  const { data } = await api.post<Note>("/notes", payload);
+  return data;
+}
+
+export async function updateNote(
+  id: string,
+  payload: { title: string; content: string; tag: string }
+) {
+  const { data } = await api.patch(`/notes/${id}`, payload);
+  return data;
+}

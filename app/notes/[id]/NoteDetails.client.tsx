@@ -2,12 +2,14 @@
 
 import { useParams, useRouter } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
 
 import type { Note } from "@/types/note";
 import css from "./NoteDetails.module.css";
 
 import { getNote } from "@/lib/api";
-import { useState } from "react";
+import Modal from "@/components/Modal/Modal";
+import NoteForm from "@/components/NoteForm/NoteForm";
 
 function NoteDetailsClient() {
   const params = useParams<{ id: string }>();
@@ -24,19 +26,32 @@ function NoteDetailsClient() {
 
   const [isEdit, setIsEdit] = useState(false);
 
-   const handleEdit = () => {
-     setIsEdit(true);
-  };
   return (
-    <div>
-      <button onClick={handleEdit}>Edit</button>
-      {isEdit ? (<form>
-        <div> <input type="text" placeholder="Title"/> </div>
-        <div> <textarea name="" id="" placeholder="Content"></textarea> </div>
-        <button>Submit</button>
-      </form>) : ( <>
-          <h1> {data?.title} </h1>
-          <p> {data?.content} </p></>
+    <div className={css.wrapper}>
+      <button type="button" onClick={() => setIsEdit(true)} disabled={!data}>
+        Edit
+      </button>
+
+{!isEdit && (
+        <>
+          <h1>{data?.title}</h1>
+          <p>{data?.content}</p>
+        </>
+      )}
+
+      {isEdit && data && (
+        <Modal onClose={() => setIsEdit(false)}>
+          <NoteForm
+            mode="edit"
+            noteId={id}
+            initialValues={{
+              title: data.title ?? "",
+              content: data.content ?? "",
+              tag: (data as any).tag ?? "Todo",
+            }}
+            onCancel={() => setIsEdit(false)}
+          />
+        </Modal>
       )}
     </div>
   );
