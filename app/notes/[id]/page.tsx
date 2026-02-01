@@ -1,6 +1,6 @@
 import { QueryClient } from "@tanstack/react-query";
 import { getNote } from "@/lib/api";
-
+import NoteDetailsClient from "./NoteDetails.client";
 
 interface NoteProps{
     params: Promise<{id: string}>
@@ -18,7 +18,7 @@ async function Note({ params }: NoteProps) {
 
     return (
         <div>
-            <h1>note</h1>
+            <NoteDetailsClient />
         </div>
     )
 }
