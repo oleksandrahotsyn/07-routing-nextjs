@@ -1,6 +1,6 @@
 import NoteList from "@/components/NoteList/NoteList";
 import { getNotes } from "@/lib/api";
-import { HydrationBoundary } from "@tanstack/react-query";
+import { HydrationBoundary, QueryClient, dehydrate } from "@tanstack/react-query";
 
 async function Notes() {
   const data = await getNotes();
