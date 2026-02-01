@@ -5,8 +5,10 @@ import { getNotes } from "@/lib/api";
 async function Notes() {
   const data = await getNotes();
 
-  return (
-        <NoteList notes={data.notes} />
+  return (<main>
+    <NoteList notes={data.notes} />
+  </main>
+        
   );
 }
 
