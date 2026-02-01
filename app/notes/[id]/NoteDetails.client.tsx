@@ -17,7 +17,7 @@ function NoteDetailsClient() {
 
   const router = useRouter();
 
-  const {data} = useQuery<Note>({
+  const { data } = useQuery<Note>({
     queryKey: ["note", id],
     queryFn: () => getNote(id),
     enabled: Boolean(id),
@@ -25,17 +25,36 @@ function NoteDetailsClient() {
   });
 
   const [isEdit, setIsEdit] = useState(false);
+  const createdDate = data?.createdAt
+    ? new Date(data.createdAt).toLocaleString()
+    : "";
 
   return (
-    <div className={css.wrapper}>
-      <button type="button" onClick={() => setIsEdit(true)} disabled={!data}>
-        Edit
-      </button>
+    <div className={css.container}>
+      <div className={css.item}>
+        <button
+          type="button"
+          className={css.backBtn}
+          onClick={() => router.back()}
+        >
+          Back
+        </button>
+        <button
+          type="button"
+          className={css.submitButton}
+          onClick={() => setIsEdit(true)}
+          disabled={!data}
+        >
+          Edit
+        </button>
+      </div>
 
-{!isEdit && (
+      {!isEdit && (
         <>
           <h1>{data?.title}</h1>
-          <p>{data?.content}</p>
+          <p className={css.content}>{data?.content}</p>
+          <p className={css.tag}>{data?.tag}</p>
+          <p className={css.date}>{createdDate}</p>
         </>
       )}
 
