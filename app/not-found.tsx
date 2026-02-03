@@ -1,20 +1,28 @@
 "use client";
 
 import { useEffect } from "react";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
+import css from "./page.module.css";
 
 function NotFound() {
   const router = useRouter();
 
   useEffect(() => {
-    setTimeout(() => {
+    const timerID = setTimeout(() => {
       router.push("/");
-    }, 300);
-  });
+    }, 3000);
+
+    return () => {
+      clearTimeout(timerID);
+    };
+  }, [router]);
+
   return (
-    <div>
-      <h1>404 NotFound Page</h1>
-      <p>You will be redirect to home page after several second...</p>
+    <div className={css.container}>
+      <h1 className={css.title}>404 NotFound Page</h1>
+      <p className={css.description}>
+        You will be redirect to home page after several second...
+      </p>
     </div>
     // <Link href="/">Go home</Link>
   );
