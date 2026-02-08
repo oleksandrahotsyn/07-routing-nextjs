@@ -6,7 +6,7 @@ import { useDebounce } from "use-debounce";
 
 import { fetchNotes } from "@/lib/api";
 import type { NotesResponse } from "@/lib/api";
-import css from "@/app/notes/NotesPage.module.css";
+import css from "./NotesPage.module.css";
 
 import SearchBox from "@/components/SearchBox/SearchBox";
 import NoteList from "@/components/NoteList/NoteList";

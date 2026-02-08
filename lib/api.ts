@@ -30,8 +30,12 @@ type FetchNotesParams = {
   tag?: NoteTag;
 };
 
-export async function getNotes(): Promise<NotesResponse> {
-  const { data } = await api.get<NotesResponse>(`/notes`);
+export async function getNotes(tag?: string): Promise<NotesResponse> {
+  const { data } = await api.get<NotesResponse>(`/notes`, {
+    params: {
+      tag
+    }
+  });
   return data;
 }
 
