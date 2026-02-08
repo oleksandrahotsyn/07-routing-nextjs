@@ -12,15 +12,14 @@ async function NotesByTag( {params}: NotesByTagProps)
     const tag = slug[0] === "all" ? undefined : slug[0];
     const data = await getNotes(tag);
 
-    console.log(data);
-    return (
-        <>
-            <h1>
-                Notes By Tag
-            </h1>
-            <NoteList notes={data.notes} />
-        </>
-    )
+    if (data.notes.length === 0) {
+        return (
+            <div>
+                <p>No notes found</p>
+            </div>
+        )
+    }
+    return <NoteList notes={data.notes} />
 }
 
 export default NotesByTag;
