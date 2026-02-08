@@ -21,10 +21,9 @@ function NotFound() {
     <div className={css.container}>
       <h1 className={css.title}>404 NotFound Page</h1>
       <p className={css.description}>
-        You will be redirect to home page after several second...
+        Sorry, the page you are looking for does not exist.
       </p>
     </div>
-    // <Link href="/">Go home</Link>
   );
 }
 
