@@ -26,7 +26,6 @@ function NotePreview({ children }: NotePreviewsProps) {
     body.style.overflow = "hidden";
     if (scrollbarWidth > 0) body.style.paddingRight = `${scrollbarWidth}px`;
 
-    // 🔒 блокуємо wheel/trackpad скролл на overlay
     const el = overlayRef.current;
     const prevent = (e: Event) => e.preventDefault();
 

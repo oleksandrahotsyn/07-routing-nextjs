@@ -1,6 +1,6 @@
 import { QueryClient, HydrationBoundary, dehydrate } from "@tanstack/react-query";
 
-import NotesClient from "./Notes.client"; // або правильний шлях до твого NotesClient
+import NotesClient from "./Notes.client"; 
 import { fetchNotes } from "@/lib/api";
 
 const PER_PAGE = 12;
