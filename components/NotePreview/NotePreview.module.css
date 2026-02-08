@@ -74,6 +74,8 @@
   display: grid;
   place-items: center;
   z-index: 1000;
+    overflow: hidden;
+  overscroll-behavior: none;
 }
 
 .modal {
@@ -85,3 +87,4 @@
   padding: 16px;
   box-shadow: 0 12px 40px rgba(0,0,0,0.35);
 }
+

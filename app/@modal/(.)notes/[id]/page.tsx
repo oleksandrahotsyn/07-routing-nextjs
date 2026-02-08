@@ -1,29 +1,24 @@
+import { QueryClient, HydrationBoundary, dehydrate } from "@tanstack/react-query";
 import { getNote } from "@/lib/api";
-//import Modal from "@/components/Modal/Modal";
-import NotePreview from "@/components/NotePreview/NotePreview";
-import css from "@/components/NotePreview/NotePreview.module.css"
+import NotePreviewClient from "./NotePreview.client";
 
-interface NotePreviewsProps{
-    params: Promise<{id:string}>
+type PageProps = {
+  params: Promise<{ id: string }>;
+};
+
+export default async function Page({ params }: PageProps) {
+  const { id } = await params;
+
+  const queryClient = new QueryClient();
+
+  await queryClient.prefetchQuery({
+    queryKey: ["note", id],
+    queryFn: () => getNote(id),
+  });
+
+  return (
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <NotePreviewClient />
+    </HydrationBoundary>
+  );
 }
-
-
-async function NotePreviews({ params }: NotePreviewsProps) {
-    const { id } = await params;
-    const note = await getNote(id);
-    const createdDate = note.createdAt
-    ? new Date(note.createdAt).toLocaleString()
-    : "";
-    
-    return (
-        <NotePreview >
-      <div className={css.item}>
-        <h2 className={css.header}>{note.title}</h2>
-        <p className={css.content}>{note.content}</p>
-        <p className={css.date}>{createdDate}</p>
-      </div>
-        </NotePreview>
-    );
-}
-
-export default NotePreviews;
