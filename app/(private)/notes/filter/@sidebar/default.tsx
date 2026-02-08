@@ -4,7 +4,7 @@ import Link from "next/link";
 async function NotesSidebar() {
     const tags = await getTags();
     return (<ul>
-        {/* <Link href="/notes/filter/all">All notes</Link> */}
+        <Link href="/notes/filter/all">All notes</Link>
         {tags.map((tag) => (
             <li key={tag}>
                 <Link href={`/notes/filter/${encodeURIComponent(tag.toLowerCase())}`}>{tag}</Link>
