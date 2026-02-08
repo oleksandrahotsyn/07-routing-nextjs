@@ -1,4 +1,5 @@
 import { getNote } from "@/lib/api";
+//import Modal from "@/components/Modal/Modal";
 import NotePreview from "@/components/NotePreview/NotePreview";
 import css from "@/components/NotePreview/NotePreview.module.css"
 
