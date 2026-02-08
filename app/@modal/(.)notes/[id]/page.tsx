@@ -1,9 +1,11 @@
 import { getNote } from "@/lib/api";
 import NotePreview from "@/components/NotePreview/NotePreview";
+import css from "@/components/NotePreview/NotePreview.module.css"
 
 interface NotePreviewsProps{
     params: Promise<{id:string}>
 }
+
 
 async function NotePreviews({ params }: NotePreviewsProps) {
     const { id } = await params;
@@ -14,9 +16,11 @@ async function NotePreviews({ params }: NotePreviewsProps) {
     
     return (
         <NotePreview >
-            <h2>{note.title}</h2>
-            <p> {note.content} </p>
-            <p> {createdDate} </p>
+      <div className={css.item}>
+        <h2 className={css.header}>{note.title}</h2>
+        <p className={css.content}>{note.content}</p>
+        <p className={css.date}>{createdDate}</p>
+      </div>
         </NotePreview>
     );
 }
