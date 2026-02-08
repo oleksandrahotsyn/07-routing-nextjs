@@ -31,13 +31,17 @@ type FetchNotesParams = {
 };
 
 export async function getNotes(tag?: string): Promise<NotesResponse> {
-  const { data } = await api.get<NotesResponse>(`/notes`, {
-    params: {
-      tag
-    }
+  const normalizedTag = tag
+    ? tag[0].toUpperCase() + tag.slice(1).toLowerCase()
+    : undefined;
+
+  const { data } = await api.get<NotesResponse>("/notes", {
+    params: normalizedTag ? { tag: normalizedTag } : undefined,
   });
+
   return data;
 }
+
 
 export async function deleteNote(id: string): Promise<void> {
   await api.delete(`/notes/${id}`);
