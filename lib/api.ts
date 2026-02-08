@@ -27,7 +27,7 @@ type FetchNotesParams = {
   page: number;
   perPage: number;
   search?: string;
-  tag?: NoteTag;
+  tag?: string;
 };
 
 export async function getNotes(tag?: string): Promise<NotesResponse> {
@@ -97,4 +97,14 @@ export async function updateNote(
 ) {
   const { data } = await api.patch(`/notes/${id}`, payload);
   return data;
+}
+
+export async function getTags() {
+  const { data } = await api.get<NotesResponse>("/notes");
+
+  const tags = Array.from(
+    new Set(data.notes.map(note => note.tag).filter(Boolean))
+  );
+
+  return tags;
 }
