@@ -30,21 +30,9 @@ type FetchNotesParams = {
   tag?: string;
 };
 
-export async function getNotes(tag?: string): Promise<NotesResponse> {
-  const normalizedTag = tag
-    ? tag[0].toUpperCase() + tag.slice(1).toLowerCase()
-    : undefined;
-
-  const { data } = await api.get<NotesResponse>("/notes", {
-    params: normalizedTag ? { tag: normalizedTag } : undefined,
-  });
-
+export async function deleteNote(id: Note["id"]): Promise<Note> {
+  const { data } = await api.delete<Note>(`/notes/${id}`);
   return data;
-}
-
-
-export async function deleteNote(id: string): Promise<void> {
-  await api.delete(`/notes/${id}`);
 }
 
 export async function getNote(id:Note["id"]) {
@@ -91,13 +79,20 @@ export async function createNote({
   return data;
 }
 
+type UpdateNotePayload = {
+  title: string;
+  content: string;
+  tag: NoteTag;
+};
+
 export async function updateNote(
-  id: string,
-  payload: { title: string; content: string; tag: string }
-) {
-  const { data } = await api.patch(`/notes/${id}`, payload);
+  id: Note["id"],
+  payload: UpdateNotePayload
+): Promise<Note> {
+  const { data } = await api.patch<Note>(`/notes/${id}`, payload);
   return data;
 }
+
 
 export async function getTags() {
   const { data } = await api.get<NotesResponse>("/notes");
