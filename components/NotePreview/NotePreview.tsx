@@ -1,75 +1,34 @@
+
 "use client";
 
-import { useEffect, useRef } from "react";
-import { useRouter } from "next/navigation";
+import type { Note } from "@/types/note";
 import css from "./NotePreview.module.css";
 
-interface NotePreviewsProps {
-  children: React.ReactNode;
-}
+type NotePreviewProps = {
+  note: Note;
+  onBack?: () => void;
+};
 
-function NotePreview({ children }: NotePreviewsProps) {
-  const router = useRouter();
-  const overlayRef = useRef<HTMLDivElement | null>(null);
-
-  useEffect(() => {
-    const html = document.documentElement;
-    const body = document.body;
-
-    const prevHtmlOverflow = html.style.overflow;
-    const prevBodyOverflow = body.style.overflow;
-    const prevBodyPaddingRight = body.style.paddingRight;
-
-    const scrollbarWidth = window.innerWidth - html.clientWidth;
-
-    html.style.overflow = "hidden";
-    body.style.overflow = "hidden";
-    if (scrollbarWidth > 0) body.style.paddingRight = `${scrollbarWidth}px`;
-
-    const el = overlayRef.current;
-    const prevent = (e: Event) => e.preventDefault();
-
-    if (el) {
-      el.addEventListener("wheel", prevent, { passive: false });
-      el.addEventListener("touchmove", prevent, { passive: false });
-    }
-
-    return () => {
-      if (el) {
-        el.removeEventListener("wheel", prevent as any);
-        el.removeEventListener("touchmove", prevent as any);
-      }
-      html.style.overflow = prevHtmlOverflow;
-      body.style.overflow = prevBodyOverflow;
-      body.style.paddingRight = prevBodyPaddingRight;
-    };
-  }, []);
-
-  const handleClose = () => router.back();
-
+export default function NotePreview({ note, onBack }: NotePreviewProps) {
   return (
-    <div
-      ref={overlayRef}
-      className={css.overlay}
-      onClick={handleClose}
-      role="dialog"
-      aria-modal="true"
-    >
-      <div className={css.modal} onClick={(e) => e.stopPropagation()}>
-        {children}
-        <button
-          className={css.backBtn}
-          onClick={(e) => {
-            e.stopPropagation(); 
-            handleClose();
-          }}
-          type="button"
-        >
-          Close
-        </button>
+    <div className={css.container}>
+      <div className={css.item}>
+        {onBack && (
+          <button className={css.backBtn} onClick={onBack} type="button">
+            ← Back
+          </button>
+        )}
+
+        <div className={css.header}>
+          <h2>{note.title}</h2>
+          <span className={css.tag} title={note.tag}>
+            {note.tag}
+          </span>
+        </div>
+
+        <p className={css.content}>{note.content}</p>
+        <p className={css.date}>{note.createdAt}</p>
       </div>
     </div>
   );
 }
-
-export default NotePreview;

@@ -13,12 +13,20 @@ export interface NoteListProps {
 export default function NoteList({ notes }: NoteListProps) {
   const queryClient = useQueryClient();
 
-  const { mutate: handleDelete, isPending } = useMutation<void, Error, string>({
-    mutationFn: (id: string) => deleteNote(id),
-    onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: ["notes"] });
-    },
-  });
+  // const { mutate: handleDelete, isPending } = useMutation<void, Error, string>({
+  //   mutationFn: (id: string) => deleteNote(id),
+  //   onSuccess: async () => {
+  //     await queryClient.invalidateQueries({ queryKey: ["notes"] });
+  //   },
+  // });
+
+  const { mutate: handleDelete, isPending } = useMutation<Note, Error, string>({
+  mutationFn: (id: string) => deleteNote(id),
+  onSuccess: async () => {
+    await queryClient.invalidateQueries({ queryKey: ["notes"] });
+  },
+});
+
 
   return (
     <ul className={css.list}>
