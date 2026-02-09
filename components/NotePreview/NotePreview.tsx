@@ -21,13 +21,11 @@ export default function NotePreview({ note, onBack }: NotePreviewProps) {
 
         <div className={css.header}>
           <h2>{note.title}</h2>
-          <span className={css.tag} title={note.tag}>
-            {note.tag}
-          </span>
         </div>
-
         <p className={css.content}>{note.content}</p>
-        <p className={css.date}>{note.createdAt}</p>
+              <div className={css.header}>
+        <p className={css.tag}>{note.tag}</p>
+        <p className={css.date}>{note.createdAt}</p></div>
       </div>
     </div>
   );
