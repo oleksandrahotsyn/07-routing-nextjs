@@ -1,6 +1,3 @@
-function NoteModal() {
-    return <>
-    </>
+export default function NoteModal() {
+  return null;
 }
-
-export default NoteModal;
